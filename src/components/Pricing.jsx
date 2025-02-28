@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PricingCard = ({ title, price, people, features, isPopular }) => {
+const PricingCard = ({ title, price, people, features, isPopular, onBookClick }) => {
   return (
     <div className={`bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl ${isPopular ? 'border-2 border-indigo-500 relative transform hover:-translate-y-1' : 'transform hover:-translate-y-1'}`}>
       {isPopular && (
@@ -27,7 +27,10 @@ const PricingCard = ({ title, price, people, features, isPopular }) => {
             </li>
           ))}
         </ul>
-        <button className={`w-full py-3 px-4 rounded-lg font-semibold ${isPopular ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-gray-100 text-indigo-600 hover:bg-gray-200'} transition-colors duration-300`}>
+        <button 
+          onClick={onBookClick}
+          className={`w-full py-3 px-4 rounded-lg font-semibold ${isPopular ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-gray-100 text-indigo-600 hover:bg-gray-200'} transition-colors duration-300`}
+        >
           Book Now
         </button>
       </div>
@@ -35,7 +38,7 @@ const PricingCard = ({ title, price, people, features, isPopular }) => {
   );
 };
 
-const Pricing = () => {
+const Pricing = ({ onBookClick }) => {
   const pricingOptions = [
     {
       title: "Solo",
@@ -79,7 +82,7 @@ const Pricing = () => {
   ];
 
   return (
-    <section id = "pricing" className="py-16 px-6 bg-gray-50 border-t border-gray-200">
+    <section id="pricing" className="py-16 px-6 bg-gray-50 border-t border-gray-200">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <span className="inline-block py-1 px-3 rounded-full bg-indigo-100 text-indigo-700 font-semibold text-sm mb-3">
@@ -100,6 +103,7 @@ const Pricing = () => {
               people={option.people}
               features={option.features}
               isPopular={option.isPopular}
+              onBookClick={onBookClick}
             />
           ))}
         </div>

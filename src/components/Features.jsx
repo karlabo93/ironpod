@@ -12,7 +12,7 @@ const FeatureCard = ({ icon, title, description }) => {
   );
 };
 
-const Features = () => {
+const Features = ({ onBookClick }) => {
   const features = [
     {
       icon: <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -59,7 +59,7 @@ const Features = () => {
   ];
 
   return (
-    <section id = "features" className="py-16 px-6 bg-gray-50">
+    <section id="features" className="py-16 px-6 bg-gray-50">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Why Choose Our Private Gym?</h2>
@@ -81,9 +81,12 @@ const Features = () => {
         </div>
         
         <div className="mt-16 text-center">
-          <a href="#booking" className="inline-block bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-300">
+          <button 
+            onClick={onBookClick}
+            className="inline-block bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-300"
+          >
             Book Your Private Session
-          </a>
+          </button>
         </div>
       </div>
     </section>

@@ -1,15 +1,24 @@
 import React from 'react';
-import Login from './Login'; // or MinimalLogin
+import Login from './Login';
 
 const LoginModal = ({ onClose, onLogin }) => {
+  // Handle backdrop click to close modal
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div 
+      className="fixed inset-0 z-50 overflow-y-auto"
+      onClick={handleBackdropClick}
+    >
       <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         {/* Background overlay */}
         <div 
           className="fixed inset-0 transition-opacity" 
           aria-hidden="true"
-          onClick={onClose}
         >
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
@@ -29,7 +38,17 @@ const LoginModal = ({ onClose, onLogin }) => {
             </button>
           </div>
           
-          {/* Insert your login component */}
+          <div className="sm:mx-auto sm:w-full sm:max-w-md">
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
+              Or{' '}
+              <a href="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
+                sign up for a new account
+              </a>
+            </p>
+          </div>
+          
+          {/* Insert the login component */}
           <Login onLogin={onLogin} />
         </div>
       </div>

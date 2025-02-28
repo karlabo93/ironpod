@@ -1,23 +1,8 @@
 import React, { useState } from 'react';
 import logo from '../assets/logo.jpg';
-import LoginModal from './LoginModal';
 
-const Navbar = () => {
+const Navbar = ({ isLoggedIn, onLoginClick }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false); 
-
-  // Function to toggle login modal
-  const toggleLogin = () => {
-    setShowLoginModal(!showLoginModal);
-  };
-
-  // Function to handle successful login
-  const handleLogin = (userData) => {
-    setShowLoginModal(false);
-    // Here you would handle the logged in state, perhaps via context or props
-    console.log("User logged in:", userData);
-    // You might also want to redirect or update UI elements based on login status
-  };
 
   return (
     <>
@@ -44,13 +29,28 @@ const Navbar = () => {
             
             {/* Secondary Nav */}
             <div className="hidden md:flex items-center space-x-1">
-              <button 
-                onClick={toggleLogin}
-                className="py-2 px-3 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition duration-300"
-              >
-                Login
-              </button>
-              <a href="/signup" className="py-2 px-3 bg-indigo-600 hover:bg-blue-500 text-white rounded-md transition duration-300">Signup</a>
+              {isLoggedIn ? (
+                <>
+                  <a href="/dashboard" className="py-2 px-3 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition duration-300">
+                    Dashboard
+                  </a>
+                  <a href="/booking" className="py-2 px-3 bg-indigo-600 hover:bg-blue-500 text-white rounded-md transition duration-300">
+                    Book Now
+                  </a>
+                </>
+              ) : (
+                <>
+                  <button 
+                    onClick={onLoginClick}
+                    className="py-2 px-3 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition duration-300"
+                  >
+                    Login
+                  </button>
+                  <a href="/signup" className="py-2 px-3 bg-indigo-600 hover:bg-blue-500 text-white rounded-md transition duration-300">
+                    Signup
+                  </a>
+                </>
+              )}
             </div>
             
             {/* Mobile button */}
@@ -88,23 +88,33 @@ const Navbar = () => {
           <a href="#hero" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white">Home</a>
           <a href="#features" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white">Features</a>
           <a href="#pricing" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white">Pricing</a>
-          <a href="#contact" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white">About</a>
+          <a href="#contact" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white">Contact</a>
           <div className="py-2">
-            <button 
-              onClick={toggleLogin}
-              className="block w-full text-left py-2 px-4 text-sm hover:bg-gray-700 text-white"
-            >
-              Login
-            </button>
-            <a href="/signup" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white font-bold">Signup</a>
+            {isLoggedIn ? (
+              <>
+                <a href="/dashboard" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white">
+                  Dashboard
+                </a>
+                <a href="/booking" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white font-bold">
+                  Book Now
+                </a>
+              </>
+            ) : (
+              <>
+                <button 
+                  onClick={onLoginClick}
+                  className="block w-full text-left py-2 px-4 text-sm hover:bg-gray-700 text-white"
+                >
+                  Login
+                </button>
+                <a href="/signup" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white font-bold">
+                  Signup
+                </a>
+              </>
+            )}
           </div>
         </div>
       </nav>
-
-      {/* Login Modal - Render conditionally */}
-      {showLoginModal && (
-        <LoginModal onClose={toggleLogin} onLogin={handleLogin} />
-      )}
     </>
   );
 };
