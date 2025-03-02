@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import logo from '../assets/logo.jpg';
 
-const Navbar = ({ isLoggedIn, onLoginClick }) => {
+const Navbar = ({ isLoggedIn, onLoginClick, onSignupClick }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -46,9 +46,12 @@ const Navbar = ({ isLoggedIn, onLoginClick }) => {
                   >
                     Login
                   </button>
-                  <a href="/signup" className="py-2 px-3 bg-indigo-600 hover:bg-blue-500 text-white rounded-md transition duration-300">
+                  <button 
+                    onClick={onSignupClick}
+                    className="py-2 px-3 bg-indigo-600 hover:bg-blue-500 text-white rounded-md transition duration-300"
+                  >
                     Signup
-                  </a>
+                  </button>
                 </>
               )}
             </div>
@@ -107,9 +110,12 @@ const Navbar = ({ isLoggedIn, onLoginClick }) => {
                 >
                   Login
                 </button>
-                <a href="/signup" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white font-bold">
+                <button 
+                  onClick={onSignupClick}
+                  className="block w-full text-left py-2 px-4 text-sm hover:bg-gray-700 text-white font-bold"
+                >
                   Signup
-                </a>
+                </button>
               </>
             )}
           </div>
