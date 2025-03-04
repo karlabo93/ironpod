@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import logo from '../assets/logo.jpg';
 
-const Navbar = ({ isLoggedIn, onLoginClick, onSignupClick }) => {
+const Navbar = ({ isLoggedIn, onLoginClick, onSignupClick, onMyAccountClick, onLogoutClick }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+
+  const toggleUserMenu = () => {
+    setShowUserMenu(!showUserMenu);
+  };
 
   return (
     <>
@@ -30,14 +35,49 @@ const Navbar = ({ isLoggedIn, onLoginClick, onSignupClick }) => {
             {/* Secondary Nav */}
             <div className="hidden md:flex items-center space-x-1">
               {isLoggedIn ? (
-                <>
-                  <a href="/dashboard" className="py-2 px-3 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition duration-300">
-                    Dashboard
-                  </a>
-                  <a href="/booking" className="py-2 px-3 bg-indigo-600 hover:bg-blue-500 text-white rounded-md transition duration-300">
-                    Book Now
-                  </a>
-                </>
+                <div className="relative">
+                  <div className="flex items-center">
+                    <button 
+                      onClick={onMyAccountClick}
+                      className="py-2 px-3 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition duration-300 mr-2"
+                    >
+                      My Account
+                    </button>
+                    <button 
+                      onClick={toggleUserMenu}
+                      className="flex items-center py-2 px-2 bg-indigo-700 hover:bg-indigo-800 text-white rounded-full transition duration-300"
+                    >
+                      <span className="sr-only">User menu</span>
+                      <div className="h-7 w-7 rounded-full bg-indigo-500 flex items-center justify-center text-sm font-medium">
+                        U
+                      </div>
+                    </button>
+                  </div>
+                  
+                  {/* User dropdown menu */}
+                  {showUserMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                      <button 
+                        onClick={onMyAccountClick}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        My Account
+                      </button>
+                      <a 
+                        href="#" 
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Settings
+                      </a>
+                      <button 
+                        onClick={onLogoutClick}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Sign out
+                      </button>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <>
                   <button 
@@ -95,12 +135,18 @@ const Navbar = ({ isLoggedIn, onLoginClick, onSignupClick }) => {
           <div className="py-2">
             {isLoggedIn ? (
               <>
-                <a href="/dashboard" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white">
-                  Dashboard
-                </a>
-                <a href="/booking" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white font-bold">
-                  Book Now
-                </a>
+                <button 
+                  onClick={onMyAccountClick}
+                  className="block w-full text-left py-2 px-4 text-sm hover:bg-gray-700 text-white"
+                >
+                  My Account
+                </button>
+                <button 
+                  onClick={onLogoutClick}
+                  className="block w-full text-left py-2 px-4 text-sm hover:bg-gray-700 text-white"
+                >
+                  Sign out
+                </button>
               </>
             ) : (
               <>
