@@ -1,12 +1,25 @@
 import React, { useState } from 'react';
 import logo from '../assets/logo.jpg';
 
-const Navbar = ({ isLoggedIn, onLoginClick, onSignupClick, onMyAccountClick, onLogoutClick }) => {
+const Navbar = ({ 
+  isLoggedIn, 
+  onLoginClick, 
+  onSignupClick, 
+  onMyAccountClick, 
+  onLogoutClick,
+  onHomeClick,
+  onBookNowClick,
+  currentPage
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   const toggleUserMenu = () => {
     setShowUserMenu(!showUserMenu);
+  };
+
+  const closeMenu = () => {
+    setIsOpen(false);
   };
 
   return (
@@ -17,18 +30,49 @@ const Navbar = ({ isLoggedIn, onLoginClick, onSignupClick, onMyAccountClick, onL
             <div className="flex space-x-4">
               {/* Logo */}
               <div>
-                <a href="/" className="flex items-center py-5 px-2 text-white">
+                <button 
+                  onClick={() => { onHomeClick(); closeMenu(); }}
+                  className="flex items-center py-5 px-2 text-white"
+                >
                   <img src={logo} alt="Logo" className="h-8 w-8 mr-2" />
                   <span className="font-bold text-xl">IronPod</span>
-                </a>
+                </button>
               </div>
               
               {/* Primary Nav */}
               <div className="hidden md:flex items-center space-x-1">
-                <a href="#hero" className="py-5 px-3 text-white hover:text-gray-300">Home</a>
-                <a href="#features" className="py-5 px-3 text-white hover:text-gray-300">Features</a>
-                <a href="#pricing" className="py-5 px-3 text-white hover:text-gray-300">Pricing</a>
-                <a href="#contact" className="py-5 px-3 text-white hover:text-gray-300">Contact</a>
+                {currentPage === 'home' ? (
+                  <>
+                    <a href="#hero" className="py-5 px-3 text-white hover:text-gray-300">Home</a>
+                    <a href="#features" className="py-5 px-3 text-white hover:text-gray-300">Features</a>
+                    <a href="#pricing" className="py-5 px-3 text-white hover:text-gray-300">Pricing</a>
+                    <a href="#contact" className="py-5 px-3 text-white hover:text-gray-300">Contact</a>
+                  </>
+                ) : (
+                  <button 
+                    onClick={onHomeClick} 
+                    className="py-5 px-3 text-white hover:text-gray-300"
+                  >
+                    Home
+                  </button>
+                )}
+                
+                {isLoggedIn && (
+                  <>
+                    <button 
+                      onClick={onMyAccountClick}
+                      className={`py-5 px-3 text-white hover:text-gray-300 ${currentPage === 'myAccount' ? 'border-b-2 border-white' : ''}`}
+                    >
+                      My Account
+                    </button>
+                    <button 
+                      onClick={onBookNowClick}
+                      className={`py-5 px-3 text-white hover:text-gray-300 ${currentPage === 'booking' ? 'border-b-2 border-white' : ''}`}
+                    >
+                      Book Session
+                    </button>
+                  </>
+                )}
               </div>
             </div>
             
@@ -38,10 +82,10 @@ const Navbar = ({ isLoggedIn, onLoginClick, onSignupClick, onMyAccountClick, onL
                 <div className="relative">
                   <div className="flex items-center">
                     <button 
-                      onClick={onMyAccountClick}
+                      onClick={onBookNowClick}
                       className="py-2 px-3 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition duration-300 mr-2"
                     >
-                      My Account
+                      Book Now
                     </button>
                     <button 
                       onClick={toggleUserMenu}
@@ -49,7 +93,7 @@ const Navbar = ({ isLoggedIn, onLoginClick, onSignupClick, onMyAccountClick, onL
                     >
                       <span className="sr-only">User menu</span>
                       <div className="h-7 w-7 rounded-full bg-indigo-500 flex items-center justify-center text-sm font-medium">
-                        U
+                        {userData?.name ? userData.name.charAt(0).toUpperCase() : 'U'}
                       </div>
                     </button>
                   </div>
@@ -58,10 +102,16 @@ const Navbar = ({ isLoggedIn, onLoginClick, onSignupClick, onMyAccountClick, onL
                   {showUserMenu && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                       <button 
-                        onClick={onMyAccountClick}
+                        onClick={() => { onMyAccountClick(); setShowUserMenu(false); }}
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >
                         My Account
+                      </button>
+                      <button 
+                        onClick={() => { onBookNowClick(); setShowUserMenu(false); }}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        Book Session
                       </button>
                       <a 
                         href="#" 
@@ -70,7 +120,7 @@ const Navbar = ({ isLoggedIn, onLoginClick, onSignupClick, onMyAccountClick, onL
                         Settings
                       </a>
                       <button 
-                        onClick={onLogoutClick}
+                        onClick={() => { onLogoutClick(); setShowUserMenu(false); }}
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >
                         Sign out
@@ -128,21 +178,38 @@ const Navbar = ({ isLoggedIn, onLoginClick, onSignupClick, onMyAccountClick, onL
         
         {/* Mobile Menu */}
         <div className={`${isOpen ? 'block' : 'hidden'} md:hidden`}>
-          <a href="#hero" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white">Home</a>
-          <a href="#features" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white">Features</a>
-          <a href="#pricing" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white">Pricing</a>
-          <a href="#contact" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white">Contact</a>
+          <button 
+            onClick={() => { onHomeClick(); closeMenu(); }}
+            className="block w-full text-left py-2 px-4 text-sm hover:bg-gray-700 text-white"
+          >
+            Home
+          </button>
+          
+          {currentPage === 'home' && (
+            <>
+              <a href="#features" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white" onClick={closeMenu}>Features</a>
+              <a href="#pricing" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white" onClick={closeMenu}>Pricing</a>
+              <a href="#contact" className="block py-2 px-4 text-sm hover:bg-gray-700 text-white" onClick={closeMenu}>Contact</a>
+            </>
+          )}
+          
           <div className="py-2">
             {isLoggedIn ? (
               <>
                 <button 
-                  onClick={onMyAccountClick}
+                  onClick={() => { onMyAccountClick(); closeMenu(); }}
                   className="block w-full text-left py-2 px-4 text-sm hover:bg-gray-700 text-white"
                 >
                   My Account
                 </button>
                 <button 
-                  onClick={onLogoutClick}
+                  onClick={() => { onBookNowClick(); closeMenu(); }}
+                  className="block w-full text-left py-2 px-4 text-sm hover:bg-gray-700 text-white font-bold"
+                >
+                  Book Now
+                </button>
+                <button 
+                  onClick={() => { onLogoutClick(); closeMenu(); }}
                   className="block w-full text-left py-2 px-4 text-sm hover:bg-gray-700 text-white"
                 >
                   Sign out
@@ -151,13 +218,13 @@ const Navbar = ({ isLoggedIn, onLoginClick, onSignupClick, onMyAccountClick, onL
             ) : (
               <>
                 <button 
-                  onClick={onLoginClick}
+                  onClick={() => { onLoginClick(); closeMenu(); }}
                   className="block w-full text-left py-2 px-4 text-sm hover:bg-gray-700 text-white"
                 >
                   Login
                 </button>
                 <button 
-                  onClick={onSignupClick}
+                  onClick={() => { onSignupClick(); closeMenu(); }}
                   className="block w-full text-left py-2 px-4 text-sm hover:bg-gray-700 text-white font-bold"
                 >
                   Signup
