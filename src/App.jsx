@@ -10,6 +10,7 @@ import Contact from './components/Contact';
 import LoginModal from './components/LoginModal';
 import SignupModal from './components/SignupModal';
 import MyAccount from './components/MyAccount';
+import BookingPage from './components/BookingPage';
 import './output.css';
 
 export default function App() {
@@ -17,7 +18,7 @@ export default function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [showMyAccount, setShowMyAccount] = useState(false);
+  const [currentPage, setCurrentPage] = useState('home'); // 'home', 'myAccount', 'booking'
 
   const toggleLogin = () => {
     setShowLogin(!showLogin);
@@ -27,14 +28,6 @@ export default function App() {
   const toggleSignup = () => {
     setShowSignup(!showSignup);
     if (showLogin) setShowLogin(false);
-  };
-
-  const toggleMyAccount = () => {
-    if (isLoggedIn) {
-      setShowMyAccount(!showMyAccount);
-    } else {
-      setShowLogin(true);
-    }
   };
 
   const handleLogin = (userData) => {
@@ -51,24 +44,58 @@ export default function App() {
     console.log("User signed up:", userData);
   };
 
-  const handleBooking = () => {
-    if (isLoggedIn) {
-      // Navigate to booking page
-      console.log("Navigating to booking page");
-      // window.location.href = '/booking';
-      
-      // For now, just show the account page since we don't have a separate booking page
-      setShowMyAccount(true);
-    } else {
-      // Show login modal
-      setShowLogin(true);
-    }
-  };
-  
   const handleLogout = () => {
     setIsLoggedIn(false);
     setUserData(null);
-    setShowMyAccount(false);
+    setCurrentPage('home');
+  };
+
+  const handleBooking = () => {
+    if (isLoggedIn) {
+      setCurrentPage('booking');
+    } else {
+      setShowLogin(true);
+    }
+  };
+
+  const handleViewAccount = () => {
+    if (isLoggedIn) {
+      setCurrentPage('myAccount');
+    } else {
+      setShowLogin(true);
+    }
+  };
+
+  const goToHome = () => {
+    setCurrentPage('home');
+  };
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'myAccount':
+        return (
+          <MyAccount 
+            userData={userData} 
+            onBookNow={handleBooking} 
+          />
+        );
+      case 'booking':
+        return (
+          <BookingPage 
+            onViewAccount={handleViewAccount} 
+          />
+        );
+      case 'home':
+      default:
+        return (
+          <>
+            <Hero onBookClick={handleBooking} />
+            <Features onBookClick={handleBooking} />
+            <Pricing onBookClick={handleBooking} />
+            <Contact />
+          </>
+        );
+    }
   };
 
   return (
@@ -77,23 +104,14 @@ export default function App() {
         isLoggedIn={isLoggedIn} 
         onLoginClick={toggleLogin}
         onSignupClick={toggleSignup}
-        onMyAccountClick={toggleMyAccount}
+        onMyAccountClick={handleViewAccount}
         onLogoutClick={handleLogout}
+        onHomeClick={goToHome}
+        onBookNowClick={handleBooking}
+        currentPage={currentPage}
       />
       
-      {showMyAccount ? (
-        <MyAccount 
-          userData={userData} 
-          onBookNow={handleBooking} 
-        />
-      ) : (
-        <>
-          <Hero onBookClick={handleBooking} />
-          <Features onBookClick={handleBooking} />
-          <Pricing onBookClick={handleBooking} />
-          <Contact />
-        </>
-      )}
+      {renderPage()}
       
       {showLogin && (
         <LoginModal 
