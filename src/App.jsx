@@ -109,6 +109,7 @@ export default function App() {
         onHomeClick={goToHome}
         onBookNowClick={handleBooking}
         currentPage={currentPage}
+        userData={userData}
       />
       
       {renderPage()}

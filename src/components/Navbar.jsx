@@ -9,7 +9,8 @@ const Navbar = ({
   onLogoutClick,
   onHomeClick,
   onBookNowClick,
-  currentPage
+  currentPage,
+  userData
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
